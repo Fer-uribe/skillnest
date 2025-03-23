@@ -1,0 +1,101 @@
+{%extends './base.html'%}
+{% block title %}Dashboard | Parque Aventura{% endblock %}
+
+{% block body %}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <i class="text-primary"><b>Bienvenido!, {{ session['nombre_user'] if 'nombre_user' in session else 'Invitado' }}</b></i>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          {% if 'id_user' in session %}
+          <li class="nav-item">
+            <a class="nav-link" href="/nueva">Nueva</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/">Iniciar Sesión</a>
+          </li>
+          {% endif %}
+        </ul>
+        
+      </div>
+    </div>
+</nav>
+
+<section class="container pt-3">
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <h3 class="card-title">Mis Visitas</h3>
+            <table class="table">
+                <thead>
+                    <th>Parque</th>
+                    <th>Rating</th>
+                    <th>Fecha de Visita</th>
+                    <th>Acciones</th>
+                </thead>
+                <tbody>
+                  {% for my_visit in my_visits %}
+                    <tr>
+                      <td>{{ my_visit.1 }}</td>
+                      <td>{{ my_visit.3 }}</td>
+                      <td>{{ my_visit.2 }}</td>
+                      <td>
+                        <div class="btn-group" role="group">
+                            <a href="{{ url_for('ver', id_visita=my_visit.0) }}" class="btn btn-sm btn-primary" title="Ver"><i class="bi bi-eye-fill"></i></a>
+                            <a href="{{ url_for('editar', id_visita=my_visit.0) }}" class="btn btn-sm btn-warning" title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                            <form action="{{ url_for('eliminar', id_visita=my_visit.0) }}" method="POST" 
+                                  onsubmit="return confirm('¿Estás seguro de eliminar esta visita?');">
+                                <button type="submit" class="btn btn-sm btn-danger" title="Eliminar">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
+                            </form>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <h3 class="card-title">Otras Visitas</h3>
+            <table class="table">
+                <thead>
+                    <th>Parque</th>
+                    <th>Rating</th>
+                    <th>Fecha de Visita</th>
+                    <th>Visitante</th>
+                    <th>Acciones</th>
+                </thead>
+                <tbody>
+                  {% for all_visit in all_visits %}
+                    <tr>
+                      <td>{{ all_visit.0 }}</td>
+                      <td>{{ all_visit.2 }}</td>
+                      <td>{{ all_visit.1 }}</td>
+                      <td>{{ all_visit.6 }}</td>
+                      <td>
+                        <div class="btn-group" role="group">
+                            <a href="{{ url_for('ver', id_visita=all_visit.0) }}" class="btn btn-sm btn-primary" title="Ver"><i class="bi bi-eye-fill"></i></a>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

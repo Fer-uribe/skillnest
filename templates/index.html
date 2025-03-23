@@ -1,0 +1,74 @@
+{%extends './base.html'%}
+{% block title %}Parque Aventura{% endblock %}
+
+{% block body %}
+
+<section class="container">
+    {% with mensajes = get_flashed_messages() %}
+        {% if mensajes %}
+            {% for mensaje in mensajes %}
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    {{mensaje}}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="pt-3">
+        <h2 class="text-center">Bienvenido a Parque Aventura</h2>
+        <div class="row row-cols-1 row-cols-md-2 pt-5">
+            <div class="col">
+                <div class="card shadow-sm border-primary border-2">
+                    <div class="card-body">
+                        <p class="card-title display-5">Registro</p>
+                        <form action="/registro" method="POST">
+                            <label for="username">Nombre</label>
+                            <input type="text" id="username" name="username" class="form-control mb-3" minlength="2" required>
+                            <label for="lastname">Apellido</label>
+                            <input type="text" id="lastname" name="lastname" class="form-control mb-3" minlength="2" required>
+                            <label for="email_reg">E-mail</label>
+                            <input type="email" id="email_reg" name="email_reg" class="form-control mb-3" required>
+                            <label for="password_reg">Contraseña</label>
+                            <input type="password" id="password_reg" name="password_reg" class="form-control mb-3">
+                            <label for="password_reg_conf">Confirmar Contraseña</label>
+                            <input type="password" id="password_reg_conf" name="password_reg_conf" class="form-control mb-3">
+                            <button type="submit" class="btn btn-sm btn rounded-5 btn-primary">Registrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card shadow-sm border-primary border-2 h-100">
+                    <div class="card-body">
+                        <p class="card-title display-5">Iniciar Sesión</p>
+                        <form action="/login" method="POST">
+                            <label for="email_log">E-mail</label>
+                            <input type="text" id="email_log" name="email_log" class="form-control mb-3">
+                            <label for="password_log">Contraseña</label>
+                            <input type="password" id="password_log" name="password_log" class="form-control mb-3"</input> 
+                            <button class="btn btn-sm rounded-5 btn-success">Ingresar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    //verificacion de contraseñas
+    const passwordReg = document.getElementById('password_reg');
+    const passwordRegConf = document.getElementById('password_reg_conf');
+
+    passwordRegConf.addEventListener('input', function() {
+        if (passwordReg.value !== passwordRegConf.value) {
+            passwordRegConf.setCustomValidity('Las contraseñas no coinciden');
+        } else {
+            passwordRegConf.setCustomValidity('');
+        }
+    });
+</script>
+
+
+
+{% endblock %}

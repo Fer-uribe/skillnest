@@ -1,0 +1,58 @@
+{%extends './base.html'%}
+{% block title %}Ver Visita | Parque Aventura{% endblock %}
+
+{% block body %}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <i class="text-primary"><b>Bienvenido!, {{ session['nombre_user'] if 'nombre_user' in session else 'Invitado' }}</b></i>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        {% if 'id_user' in session %}
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Cerrar Sesión</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+          </li>
+          {% endif %}
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+
+<section class="container pt-3">
+  <div class="card shadow-sm">
+      <div class="card-body">
+          <h4 class="card-title mb-4">{{ visita.0 }}</h4> 
+          <p class="text-center text-primary mb-3"><i>Información de la Visita</i></p>
+          <p><b>Fecha de la Visita:</b> {{ visita.1 }}</p>
+          <p><b>Rating:</b> {{ visita.2 }}</p>
+          <p><b>Detalles:</b> {{ visita.3 }}</p>
+          
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <p><b>Me Gusta:</b> <span id="likes-count">{{ visita.4 }}</span></p>
+              
+              {% if session['id_user']|string not in request.cookies.get('liked_visitas', '') %}
+              <form action="{{ url_for('like_visita', id_visita=id_visita) }}" method="POST">
+                <button type="submit" class="btn btn-sm btn-primary rounded-5">Me Gusta</button>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+
+{% endblock %}
